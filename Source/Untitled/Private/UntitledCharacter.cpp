@@ -24,8 +24,8 @@ AUntitledCharacter::AUntitledCharacter(const class FPostConstructInitializePrope
 	// Configure character movement
 	CharacterMovement->bOrientRotationToMovement = true; // Character moves in the direction of input...	
 	CharacterMovement->RotationRate = FRotator(0.0f, 540.0f, 0.0f); // ...at this rotation rate
-	CharacterMovement->JumpZVelocity = 5.f;
-	CharacterMovement->AirControl = 0.01f;
+	CharacterMovement->JumpZVelocity = 450.f;
+	CharacterMovement->AirControl = 200.f;
 
 	// Create a camera boom (pulls in towards the player if there is a collision)
 	CameraBoom = PCIP.CreateDefaultSubobject<USpringArmComponent>(this, TEXT("CameraBoom"));
