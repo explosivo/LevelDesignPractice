@@ -24,6 +24,17 @@ class AUntitledCharacter : public ACharacter
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=Camera)
 	float BaseLookUpRate;
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = Health)
+	uint32 TotalHealth;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = Health)
+	uint32 Health;
+
+	UFUNCTION(BlueprintCallable, Category = Health)
+	void AddHealth(int32 HealthToAdd);
+
+	UFUNCTION(BlueprintCallable, Category = Health)
+	bool CanAddHealth();
+
 protected:
 
 	/** Called for forwards/backward input */
