@@ -60,8 +60,8 @@ void AUntitledCharacter::Tick(float DeltaTime)
 		CharacterMovement->MaxWalkSpeed = SlideSpeed;
 		const FVector Direction = YawRotation.Vector();
 		
-		SlideSpeed -= SlideFriction;
-		SlideFriction += .05;
+		SlideSpeed -= SlideFriction * DeltaTime * 100;
+		SlideFriction += .05 * DeltaTime * 100;
 		AddMovementInput(Direction, 1.0f);
 	}
 }
