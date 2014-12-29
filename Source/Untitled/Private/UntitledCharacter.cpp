@@ -10,7 +10,7 @@ AUntitledCharacter::AUntitledCharacter(const class FPostConstructInitializePrope
 	: Super(PCIP)
 {
 	// Set size for collision capsule
-	CapsuleComponent->InitCapsuleSize(42.f, 96.0f);
+	GetCapsuleComponent()->InitCapsuleSize(42.f, 96.0f);
 
 	// set our turn rates for input
 	BaseTurnRate = 45.f;
@@ -22,10 +22,10 @@ AUntitledCharacter::AUntitledCharacter(const class FPostConstructInitializePrope
 	bUseControllerRotationRoll = false;
 
 	// Configure character movement
-	CharacterMovement->bOrientRotationToMovement = true; // Character moves in the direction of input...	
-	CharacterMovement->RotationRate = FRotator(0.0f, 540.0f, 0.0f); // ...at this rotation rate
-	CharacterMovement->JumpZVelocity = 450.f;
-	CharacterMovement->AirControl = 200.f;
+	GetCharacterMovement()->bOrientRotationToMovement = true; // Character moves in the direction of input...	
+	GetCharacterMovement()->RotationRate = FRotator(0.0f, 540.0f, 0.0f); // ...at this rotation rate
+	GetCharacterMovement()->JumpZVelocity = 450.f;
+	GetCharacterMovement()->AirControl = 200.f;
 
 	// Create a camera boom (pulls in towards the player if there is a collision)
 	CameraBoom = PCIP.CreateDefaultSubobject<USpringArmComponent>(this, TEXT("CameraBoom"));
