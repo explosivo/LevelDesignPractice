@@ -45,6 +45,27 @@ AUntitledCharacter::AUntitledCharacter(const class FPostConstructInitializePrope
 	// are set in the derived blueprint asset named MyCharacter (to avoid direct content references in C++)
 }
 
+void AUntitledCharacter::Tick(float DeltaTime)
+{
+	Super::Tick(DeltaTime);
+	if (IsSliding)
+	{
+		const FRotator Rotation = GetActorRotation();
+		const FRotator YawRotation(0, Rotation.Yaw, 0);
+		if (SlideSpeed < 0)
+		{	
+			IsSliding = false;
+			SlideSpeed = 0;
+		}
+		CharacterMovement->MaxWalkSpeed = SlideSpeed;
+		const FVector Direction = YawRotation.Vector();
+		
+		SlideSpeed -= SlideFriction;
+		SlideFriction += .05;
+		AddMovementInput(Direction, 1.0f);
+	}
+}
+
 //////////////////////////////////////////////////////////////////////////
 // Input
 
@@ -54,6 +75,8 @@ void AUntitledCharacter::SetupPlayerInputComponent(class UInputComponent* InputC
 	check(InputComponent);
 	InputComponent->BindAction("Jump", IE_Pressed, this, &ACharacter::Jump);
 	InputComponent->BindAction("Jump", IE_Released, this, &ACharacter::StopJumping);
+	InputComponent->BindAction("Slide", IE_Pressed, this, &AUntitledCharacter::Slide);
+	InputComponent->BindAction("Slide", IE_Released, this, &AUntitledCharacter::StopSliding);
 
 	InputComponent->BindAxis("MoveForward", this, &AUntitledCharacter::MoveForward);
 	InputComponent->BindAxis("MoveRight", this, &AUntitledCharacter::MoveRight);
@@ -69,6 +92,7 @@ void AUntitledCharacter::SetupPlayerInputComponent(class UInputComponent* InputC
 	// handle touch devices
 	InputComponent->BindTouch(IE_Pressed, this, &AUntitledCharacter::TouchStarted);
 	InputComponent->BindTouch(IE_Released, this, &AUntitledCharacter::TouchStopped);
+
 }
 
 
@@ -103,7 +127,7 @@ void AUntitledCharacter::LookUpAtRate(float Rate)
 
 void AUntitledCharacter::MoveForward(float Value)
 {
-	if ((Controller != NULL) && (Value != 0.0f))
+	if ((Controller != NULL) && (Value != 0.0f) && !IsSliding)
 	{
 		// find out which way is forward
 		const FRotator Rotation = Controller->GetControlRotation();
@@ -117,7 +141,7 @@ void AUntitledCharacter::MoveForward(float Value)
 
 void AUntitledCharacter::MoveRight(float Value)
 {
-	if ( (Controller != NULL) && (Value != 0.0f) )
+	if ( (Controller != NULL) && (Value != 0.0f))
 	{
 		// find out which way is right
 		const FRotator Rotation = Controller->GetControlRotation();
@@ -149,4 +173,23 @@ bool AUntitledCharacter::CanAddHealth()
 		return false;
 	}
 	return true;
+}
+
+void AUntitledCharacter::Slide()
+{	
+	float CurrentSpeed = CharacterMovement->Velocity.Size2D();
+	if (CurrentSpeed > 10)
+	{
+		SlideFriction = 5;
+		SlideSpeed = CurrentSpeed + 600;
+	}
+	IsSliding = true;
+
+}
+
+void AUntitledCharacter::StopSliding()
+{
+	CharacterMovement->MaxWalkSpeed = 600;
+	IsSliding = false;
+
 }

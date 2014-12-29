@@ -35,6 +35,14 @@ class AUntitledCharacter : public ACharacter
 	UFUNCTION(BlueprintCallable, Category = Health)
 	bool CanAddHealth();
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Slide)
+	bool IsSliding;
+
+	float SlideSpeed;
+	float SlideFriction;
+
+	virtual void Tick(float DeltaTime) override;
+
 protected:
 
 	/** Called for forwards/backward input */
@@ -60,6 +68,12 @@ protected:
 
 	/** Handler for when a touch input stops. */
 	void TouchStopped(ETouchIndex::Type FingerIndex, FVector Location);
+
+	/** Called for slide input begins */
+	void Slide();
+
+	/** Called for slide input begins */
+	void StopSliding();
 
 protected:
 	// APawn interface
