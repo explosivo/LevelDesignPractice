@@ -127,7 +127,7 @@ void AUntitledCharacter::LookUpAtRate(float Rate)
 
 void AUntitledCharacter::MoveForward(float Value)
 {
-	if ((Controller != NULL) && (Value != 0.0f) && !IsSliding)
+	if ((Controller != NULL) && (Value != 0.0f))
 	{
 		// find out which way is forward
 		const FRotator Rotation = Controller->GetControlRotation();
